@@ -776,13 +776,19 @@ section .section-title::after {
   background-position: center;
   padding-top: 66.6%;
   position: relative;
+  margin-bottom: 13px;
 }
 
 .a-title {
-  margin-top: 13px;
   font-weight: bold;
   color: #3e61dc;
   font-size: 16px;
+  text-decoration: none;
+}
+
+.a-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .a-link {
@@ -828,7 +834,7 @@ div.a-content {
   color: #414141;
   font-size: 1.5em;
   font-weight: 500;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .article__author, .article__date {
@@ -1013,10 +1019,10 @@ footer {
   padding: 0 60px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto 1fr auto;
-      grid-template-columns: auto 1fr auto;
+  -ms-grid-columns: auto 1fr;
+      grid-template-columns: auto 1fr;
   grid-gap: 0px;
-      grid-template-areas: "logo" "link-one" "link-two";
+      grid-template-areas: "logo" "link-one";
 }
 
 header {
@@ -1047,12 +1053,7 @@ header .link-one {
   -ms-grid-row: 2;
   -ms-grid-column: 1;
   grid-area: link-one;
-}
-
-header .link-two {
-  -ms-grid-row: 3;
-  -ms-grid-column: 1;
-  grid-area: link-two;
+  text-align: right;
 }
 
 header ul {
@@ -1060,7 +1061,10 @@ header ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  line-height: 85px;
+  line-height: 70px;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 header ul li {

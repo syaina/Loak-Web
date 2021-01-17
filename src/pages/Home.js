@@ -38,7 +38,7 @@ export default function Home () {
         const req2 = axios.get(endpoint2);
 
         req1.then((response) => {
-            //console.log(response);
+            console.log(response);
             // if (response.status === 200) {
             if (response.data.status) {
                 let respProfileProducts = [];
