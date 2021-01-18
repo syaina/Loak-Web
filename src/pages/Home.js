@@ -16,6 +16,7 @@ export default function Home () {
     // const [isLoggedIn, setLoggedIn] = useState(false);
     // const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const [profileProducts, setProfileProducts] = useState([]);
+    const [profileArticles, setProfileArticles] = useState([]);
     const [isLoading, setLoading] = useState(true);
     let loading = <div></div>;
     
@@ -32,13 +33,12 @@ export default function Home () {
 
     useEffect(() => {
         const endpoint1 = 'profile/products';
-        const endpoint2 = 'profile/articles';
+        const endpoint2 = 'article';
 
         const req1 = axios.get(endpoint1);
         const req2 = axios.get(endpoint2);
 
         req1.then((response) => {
-            console.log(response);
             // if (response.status === 200) {
             if (response.data.status) {
                 let respProfileProducts = [];
@@ -51,7 +51,6 @@ export default function Home () {
                 });
 
                 setProfileProducts(respProfileProducts);
-                setLoading(false)
             }
 
             else {
@@ -63,25 +62,37 @@ export default function Home () {
         })
 
         req2.then((response) => {
-            console.log(response);
-            // if (response.status === 200) {
-            // if (response.data.status) {
-            //     console.log(response.data.data);
-            //     let respProfileProducts = [];
+            if (response.status === 200) {
+                if (response.data.status) {
+                    let respArticles = [];
                 
-            //     response.data.data.map(resp => {
-            //         respProfileProducts.push({
-            //             productId: resp.id,
-            //             thumbnail: resp.product.thumbnail_url
-            //         });
-            //     });
-
-            //     setProfileProducts(respProfileProducts);
-            //     setLoading(false)
-            // }
-
+                    response.data.data.map(resp => {
+                        respArticles.push({
+                            id: resp.id,
+                            thumbnail: 'https://dev.api.loakarya.co/storage/article/' + resp.thumbnail_url,
+                            title: resp.title,
+                            slug: resp.slug,
+                            content: resp.content
+                        });
+                    });
+                    
+                    setProfileArticles(respArticles);
+                    getContentString(respArticles);
+                    setLoading(false);
+                }
+            }
         })
     }, [])
+
+    function getContentString (data) {
+        const allArticles = [...data];
+
+        for (var i=0; i < allArticles.length ; i++) {
+            allArticles[i].content = allArticles[i].content.replace(/<[^>]*(>|$)|&nbsp;|&zwnj;|&raquo;|&laquo;|&gt;/g, ' ');
+        }
+
+        setProfileArticles(allArticles);
+    }
 
     if(isLoading) return (
         <Loading />
@@ -201,13 +212,14 @@ export default function Home () {
                 <section>
                     <h1 class="section-title">Artikel Terbaru</h1>
                     <Grid container spacing={4} className="mb-4">
-                        {profileProducts.slice(0, 3).map((article) => 
-                            <Grid item xs={12} sm={6} md={4}>
+                        {profileArticles.slice(0, 3).map((article) => 
+                            <Grid item xs={12} sm={6} md={3}>
                                 <div>
                                     <div className="a-image" style={{ backgroundImage: `url(${article.thumbnail})` }}>
                                     </div>
-                                    <h3 className="a-title">Dummy</h3>
-                                    <Link to={`articles/${article.productId}`} className="a-link">Lihat Selengkapnya</Link>
+                                    <Link to={`articles/${article.slug}`} className="a-title">{article.title}</Link>
+                                    <div className="a-content">{article.content}</div>
+                                    <Link to={`articles/${article.slug}`} className="a-link">Baca Artikel</Link>
                                 </div>
                             </Grid>
                         )}
